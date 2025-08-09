@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use finfo;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,24 +22,22 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'representative',
+        'admin'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function userShop()
+    {
+        return $this->hasMany(Shop::class);
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function userReservation()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    public function userFavorite()
+    {
+        return $this->belongsToMany(Shop::class);
+    }
 }
