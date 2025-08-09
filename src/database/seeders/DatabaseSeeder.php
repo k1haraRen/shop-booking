@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Shop;
+use App\Models\Area;
+use App\Models\Genre;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +17,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call(UserSeeder::class);
+        $this->call(AreaSeeder::class);
+        $this->call(GenreSeeder::class);
+        $this->call(ShopSeeder::class);
     }
 }
