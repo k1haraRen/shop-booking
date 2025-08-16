@@ -3,15 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <title>店舗一覧 - Rese</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #eeeeee;
-            font-family: 'Arial', sans-serif;
-        }
-
         .header {
             display: flex;
             align-items: center;
@@ -35,89 +30,6 @@
             font-weight: bold;
             color: #3366ff;
         }
-
-        .search-box {
-            margin-left: auto;
-            margin-right: 40px;
-            background-color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .search-box select,
-        .search-box input {
-            padding: 6px 8px;
-            font-size: 14px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-            padding: 40px;
-        }
-
-        .shop-card {
-            width: 300px;
-            background-color: white;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-
-        .shop-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .shop-content {
-            padding: 15px;
-            position: relative;
-        }
-
-        .shop-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-
-        .shop-tags {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 10px;
-        }
-
-        .detail-button {
-            background-color: #3366ff;
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .heart-icon {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 20px;
-            color: #e0e0e0;
-            cursor: pointer;
-        }
-
-        .heart-icon.active {
-            color: red;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -129,27 +41,70 @@
         <span class="logo-text">Rese</span>
 
         <div class="search-box">
-            <select>
-                <option>All area</option>
+            <select name="area" id="search-area">
+                    <option value="">ALL area</option>
+                @foreach ($areas as $area)
+                    <option value="{{ $area->id }}">{{ $area->area }}</option>
+                @endforeach
             </select>
-            <select>
-                <option>All genre</option>
+            <select name="genre" id="search-genre">
+                    <option value="">ALL genre</option>
+                @foreach ($genres as $genre)
+                    <option value="{{ $genre->id }}">{{ $genre->genre }}</option>
+                @endforeach
             </select>
-            <input type="text" placeholder="Search ...">
+            <input type="text" placeholder="Search ..." name="name" id="search-name">
         </div>
     </div>
 
-    <div class="container">
-        <div class="shop-card">
-            <img src="https://via.placeholder.com/300x200.png?text=Sample+Image" class="shop-image" alt="店舗画像">
-            <div class="shop-content">
-                <div class="shop-name">店舗名</div>
-                <div class="shop-tags">#都道府県 #ジャンル</div>
-                <button class="detail-button">詳しくみる</button>
-                <i class="fas fa-heart heart-icon"></i>
-            </div>
-        </div>
+    <div id="search-results">
+        @include('shop.shop_list', ['shops' => $shops])
     </div>
+
+    <script>
+        let inputs = ['search-name', 'search-area', 'search-genre'];
+
+            inputs.forEach(id => {
+                document.getElementById('search-name').addEventListener('input', searchShops);
+                document.getElementById('search-area').addEventListener('change', searchShops);
+                document.getElementById('search-genre').addEventListener('change', searchShops);
+            });
+
+            function searchShops() {
+                let name = document.getElementById('search-name').value;
+                let area = document.getElementById('search-area').value;
+                let genre = document.getElementById('search-genre').value;
+
+                let params = new URLSearchParams({
+                    name: name,
+                    area: area,
+                    genre: genre
+                });
+
+                fetch(`/shop/shop_list?${params.toString()}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('search-results').innerHTML = data;
+                    });
+            }
+
+        document.querySelectorAll('.heart__mark-input').forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    let shopId = this.id.replace('favorite-', '');
+
+                    fetch(`/favorite/toggle/${shopId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({})
+                    })
+                        .then(response => response.json())
+                        .then(data => {});
+                });
+            });
+    </script>
 
 </body>
 

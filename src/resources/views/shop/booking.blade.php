@@ -3,15 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ asset('css/booking.css') }}">
     <title>予約完了 - Rese</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #eeeeee;
-            font-family: 'Arial', sans-serif;
-        }
-
         .header {
             display: flex;
             align-items: center;
@@ -35,41 +29,6 @@
             font-weight: bold;
             color: #3366ff;
         }
-
-        .main {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 70vh;
-        }
-
-        .card {
-            background-color: white;
-            padding: 40px 60px;
-            border-radius: 6px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-        .message {
-            font-size: 20px;
-            margin-bottom: 30px;
-        }
-
-        .back-button {
-            background-color: #3366ff;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            font-size: 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .back-button:hover {
-            background-color: #0047cc;
-        }
     </style>
 </head>
 
@@ -83,7 +42,7 @@
     <div class="main">
         <div class="card">
             <div class="message">ご予約ありがとうございます</div>
-            <a href="" class="back-button">戻る</a>
+            <a href="{{ route('shop_home') }}" class="back-button">戻る</a>
         </div>
     </div>
 

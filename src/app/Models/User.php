@@ -36,8 +36,8 @@ class User extends Authenticatable
         return $this->hasMany(Reservation::class);
     }
 
-    public function userFavorite()
+    public function favorites()
     {
-        return $this->belongsToMany(Shop::class);
+        return $this->belongsToMany(Shop::class, 'favorites', 'user_id', 'shop_id');
     }
 }

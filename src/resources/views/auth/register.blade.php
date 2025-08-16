@@ -3,15 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
     <title>Registration - Rese</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #eeeeee;
-            font-family: 'Arial', sans-serif;
-        }
-
         .header {
             display: flex;
             align-items: center;
@@ -39,67 +33,6 @@
             font-weight: bold;
             color: #3366ff;
         }
-
-        .register-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: calc(100vh - 80px);
-        }
-
-        .register-card {
-            width: 360px;
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-            overflow: hidden;
-        }
-
-        .register-card-header {
-            background-color: #3366ff;
-            color: white;
-            padding: 16px;
-            font-size: 18px;
-        }
-
-        .register-card-body {
-            padding: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .form-group i {
-            font-size: 18px;
-            margin-right: 10px;
-            color: #333;
-        }
-
-        .form-input {
-            border: none;
-            border-bottom: 1px solid #333;
-            width: 100%;
-            font-size: 16px;
-            padding: 6px 0;
-            outline: none;
-        }
-
-        .register-button {
-            background-color: #3366ff;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            float: right;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .register-button:hover {
-            background-color: #274fc3;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -117,20 +50,33 @@
                 Registration
             </div>
             <div class="register-card-body">
-                <div class="form-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" class="form-input" placeholder="Username">
-                </div>
-                <div class="form-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" class="form-input" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" class="form-input" placeholder="Password">
-                </div>
-                <button class="register-button">登録</button>
+                <form method="post" action="/register">
+                    @csrf
+
+                    <div class="form-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" class="form-input" placeholder="Username" name="name" value="{{ old('name') }}">
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" class="form-input" placeholder="Email" name="email" value="{{ old('email') }}">
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="text" class="form-input" placeholder="Password" name="password">
+                    </div>
+                    <button class="register-button">登録</button>
+                </form>
             </div>
+            @if ($errors->any())
+                <div style="color: red;">
+                    <ul style="margin-top: 10px;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
     </div>
 

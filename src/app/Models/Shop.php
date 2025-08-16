@@ -20,7 +20,7 @@ class Shop extends Model
 
     public function shopUser()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function shopReservation()
@@ -28,18 +28,18 @@ class Shop extends Model
         return $this->hasMany(reservation::class);
     }
 
-    public function shopFavorite()
+    public function favoritedBy()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'favorites', 'shop_id', 'user_id');
     }
 
     public function shopArea()
     {
-        return $this->hasOne(Area::class);
+        return $this->belongsTo(Area::class, 'area_id');
     }
 
     public function shopGenre()
     {
-        return $this->hasOne(Genre::class);
+        return $this->belongsTo(Genre::class, 'genre_id');
     }
 }
