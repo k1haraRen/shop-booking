@@ -13,55 +13,93 @@
 <body>
 
     <div class="header">
-        <button class="menu-button"><i class="fas fa-bars"></i></button>
+        <button id="menu-toggle" class="logo logo-button"><i class="fas fa-bars"></i></button>
         <span class="logo-text">Rese</span>
 
-        <div class="search-box">
-            <select name="area" id="search-area">
-                <option value="">ALL area</option>
-                @foreach ($areas as $area)
-                    <option value="{{ $area->id }}">{{ $area->area }}</option>
-                @endforeach
-            </select>
-            <select name="genre" id="search-genre">
-                <option value="">ALL genre</option>
-                @foreach ($genres as $genre)
-                    <option value="{{ $genre->id }}">{{ $genre->genre }}</option>
-                @endforeach
-            </select>
-            <input type="text" placeholder="Search ..." name="name" id="search-name">
+        @if (Route::currentRouteName() === 'shop_home')
+            <div class="search-box">
+                <select name="area" id="search-area">
+                    <option value="">ALL area</option>
+                    @foreach ($areas ?? [] as $area)
+                        <option value="{{ $area->id }}">{{ $area->area }}</option>
+                    @endforeach
+                </select>
+                <select name="genre" id="search-genre">
+                    <option value="">ALL genre</option>
+                    @foreach ($genres ?? [] as $genre)
+                        <option value="{{ $genre->id }}">{{ $genre->genre }}</option>
+                    @endforeach
+                </select>
+                <input type="text" placeholder="Search ..." name="name" id="search-name">
+            </div>
+        @endif
+    </div>
+
+    {{-- モーダル --}}
+    <div id="menu-modal" class="modal hidden" aria-hidden="true" role="dialog">
+        <div class="modal-content">
+            <button id="close-modal" class="close-btn" aria-label="閉じる">×</button>
+            <ul class="menu-list">
+                <li><a class="menu-link" href="{{ route('shop_home') }}">Home</a></li>
+                @auth
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}" class="menu-form">
+                            @csrf
+                            <button type="submit" class="menu-link">Logout</button>
+                        </form>
+                    </li>
+                    <li><a class="menu-link" href="{{ route('mypage') }}">Mypage</a></li>
+                @else
+                    <li><a class="menu-link" href="{{ route('register_show') }}">Registration</a></li>
+                    <li><a class="menu-link" href="{{ route('login_show') }}">Login</a></li>
+                @endauth
+            </ul>
         </div>
     </div>
 
     @yield('content')
 
-    <script>
-        let inputs = ['search-name', 'search-area', 'search-genre'];
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('menu-toggle');
+            const modal = document.getElementById('menu-modal');
+            const closeBtn = document.getElementById('close-modal');
 
-        inputs.forEach(id => {
-            document.getElementById('search-name').addEventListener('input', searchShops);
-            document.getElementById('search-area').addEventListener('change', searchShops);
-            document.getElementById('search-genre').addEventListener('change', searchShops);
-        });
-
-        function searchShops() {
-            let name = document.getElementById('search-name').value;
-            let area = document.getElementById('search-area').value;
-            let genre = document.getElementById('search-genre').value;
-
-            let params = new URLSearchParams({
-                name: name,
-                area: area,
-                genre: genre
-            });
-
-            fetch(`/shop/shop_list?${params.toString()}`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('search-results').innerHTML = data;
+            if (toggleBtn && modal && closeBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    modal.classList.remove('hidden');
+                    toggleBtn.classList.add('hidden');
                 });
-        }
-    </script>
+                closeBtn.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                    toggleBtn.classList.remove('hidden');
+                });
+            }
+
+            @if (Route::currentRouteName() === 'shop_home')
+                const nameEl = document.getElementById('search-name');
+                const areaEl = document.getElementById('search-area');
+                const genreEl = document.getElementById('search-genre');
+                const results = document.getElementById('search-results');
+
+                function searchShops() {
+                    const params = new URLSearchParams({
+                        name: nameEl?.value || '',
+                        area: areaEl?.value || '',
+                        genre: genreEl?.value || ''
+                    });
+
+                    fetch(`/shop/shop_list?${params.toString()}`)
+                        .then(r => r.text())
+                        .then(html => { results && (results.innerHTML = html); });
+                }
+
+                nameEl && nameEl.addEventListener('input', searchShops);
+                areaEl && areaEl.addEventListener('change', searchShops);
+                genreEl && genreEl.addEventListener('change', searchShops);
+            @endif
+    });
+</script>
 
 </body>
 

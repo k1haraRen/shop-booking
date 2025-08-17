@@ -89,4 +89,14 @@ class ShopController extends Controller
     {
         return view('shop.booking');
     }
+
+    public function mypage()
+    {
+        $user = Auth::user();
+
+        $favorites = $user->favorites()->with(['shopArea', 'shopGenre'])->get();
+        $reservations = $user->userReservation()->with('reservationShop')->get();
+
+        return view('shop.mypage', compact('user', 'favorites', 'reservations'));
+    }
 }
