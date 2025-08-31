@@ -16,8 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/register', [AuthController::class, 'registerShow'])->name('register_show');
+Route::post('/register', [AuthController::class, 'register']);
 Route::get('/thanks', [AuthController::class, 'thanks'])->name('thanks');
 Route::get('/login', [AuthController::class, 'loginShow'])->name('login_show');
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/', [ShopController::class, 'home'])->name('shop_home');
 Route::get('/shop/shop_list', [ShopController::class, 'shopList'])->name('shop_list');
@@ -34,3 +36,7 @@ Route::get('/reservation/done', [ShopController::class, 'done']);
 Route::get('/mypage', [ShopController::class, 'mypage'])
     ->middleware('auth')
     ->name('mypage');
+Route::middleware('auth')->group(function () {
+    Route::put('/reservation/{id}', [ShopController::class, 'update'])->name('reservation.update');
+    Route::delete('/reservation/{id}', [ShopController::class, 'destroy'])->name('reservation.destroy');
+});

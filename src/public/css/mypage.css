@@ -114,3 +114,80 @@ body {
     color: red;
     font-size: 18px;
 }
+
+.reservation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    /* layoutより優先 */
+}
+
+.reservation-modal.active {
+    display: flex;
+}
+
+.reservation-modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-modal-content h3 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: #2563eb;
+}
+
+.reservation-modal-content form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.reservation-modal-content form input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.reservation-modal-content .modal-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.reservation-modal-content button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.save-btn {
+    background: #2563eb;
+    color: white;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.cancel-btn {
+    background: #6b7280;
+    color: white;
+}

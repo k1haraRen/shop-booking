@@ -22,6 +22,15 @@
                         <i class="fas fa-lock"></i>
                         <input type="text" class="form-input" placeholder="Password" name="password">
                     </div>
+                    @if ($errors->any())
+                        <div style="color: red;">
+                            <ul style="margin-top: 10px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <button class="login-button">ログイン</button>
                 </form>
             </div>

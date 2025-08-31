@@ -21,9 +21,9 @@
             <form action="{{ route('reservation.store') }}" method="post">
                 @csrf
                 <input type="hidden" name="shop_id" value="{{ $shop->id }}">
-                <input type="date" name="date" id="date" required>
-                <input type="time" name="time" id="time" required>
-                <input type="number" name="headcount" id="headcount" min="1" placeholder="人数" required>
+                <input type="date" name="date" id="date">
+                <input type="time" name="time" id="time">
+                <input type="number" name="headcount" id="headcount" min="1" placeholder="人数">
 
                 <div class="reservation-summary">
                     <div><strong>Shop</strong>　{{ $shop->shop_name }}</div>
@@ -31,6 +31,16 @@
                     <div><strong>Time</strong>　<span id="summary-time">----</span></div>
                     <div><strong>Number</strong>　<span id="summary-headcount">----</span></div>
                 </div>
+
+                @if ($errors->any())
+                    <div style="color: red;">
+                        <ul style="margin-top: 10px;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 <button class="submit-button" type="submit">予約する</button>
             </form>

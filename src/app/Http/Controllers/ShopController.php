@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Http\Requests\ReservationRequest;
 use App\Models\User;
 use App\Models\Shop;
 use App\Models\Reservation;
@@ -66,15 +67,8 @@ class ShopController extends Controller
 
         return view('shop.detail', compact('shop'));
     }
-    public function store(Request $request)
+    public function store(ReservationRequest $request)
     {
-        $request->validate([
-            'shop_id' => 'required|exists:shops,id',
-            'date' => 'required|date',
-            'time' => 'required',
-            'headcount' => 'required|integer|min:1',
-        ]);
-
         Reservation::create([
             'user_id' => auth()->id(),
             'shop_id' => $request->shop_id,
@@ -98,5 +92,25 @@ class ShopController extends Controller
         $reservations = $user->userReservation()->with('reservationShop')->get();
 
         return view('shop.mypage', compact('user', 'favorites', 'reservations'));
+    }
+    public function update(ReservationRequest $request, $id)
+    {
+        $reservation = Reservation::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $reservation->update($request->validated());
+
+        return redirect()->route('mypage');
+    }
+    public function destroy($id)
+    {
+        $reservation = Reservation::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $reservation->delete();
+
+        return redirect()->route('mypage');
     }
 }
