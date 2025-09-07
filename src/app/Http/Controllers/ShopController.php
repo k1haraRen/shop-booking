@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Models\User;
@@ -112,5 +113,78 @@ class ShopController extends Controller
         $reservation->delete();
 
         return redirect()->route('mypage');
+    }
+
+    public function edit($id)
+    {
+        $shop = Shop::with(['shopArea', 'shopGenre'])->findOrFail($id);
+        $areas = Area::all();
+        $genres = Genre::all();
+
+        $reservations = $shop->shopReservation()
+            ->orderBy('date', 'asc')
+            ->orderBy('time', 'asc')
+            ->get();
+
+        return view('shop.edit', compact('shop', 'areas', 'genres', 'reservations'));
+    }
+
+    public function shopUpdate(Request $request, $id)
+    {
+        $shop = Shop::findOrFail($id);
+
+        $validated = $request->validate([
+            'shop_name' => 'required|string|max:255',
+            'area_id' => 'required|integer|exists:areas,id',
+            'genre_id' => 'required|integer|exists:genres,id',
+            'introduction' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:5120',
+        ]);
+
+        $data = $validated;
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $file = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/img', $filename);
+
+            if ($shop->pic_url) {
+                $old = 'public/img/' . $shop->pic_url;
+                if (Storage::exists($old))
+                    Storage::delete($old);
+            }
+
+            $data['pic_url'] = $filename;
+        }
+
+        $shop->update($data);
+
+        return redirect()->route('shop.edit', $shop->id);
+    }
+
+    public function createView()
+    {
+        $areas = Area::all();
+        $genres = Genre::all();
+
+        return view('shop.create', compact('areas', 'genres'));
+    }
+
+    public function create(Request $request)
+    {
+        $data = $request->all();
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $file = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/img', $filename);
+            $data['pic_url'] = $filename;
+        }
+
+        $data['user_id'] = auth()->id();
+
+        $shop = Shop::create($data);
+
+        return redirect()->route('shop_detail', $shop->id);
     }
 }

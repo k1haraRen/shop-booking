@@ -25,7 +25,7 @@ class Shop extends Model
 
     public function shopReservation()
     {
-        return $this->hasMany(reservation::class);
+        return $this->hasMany(Reservation::class, 'shop_id', 'id');
     }
 
     public function favoritedBy()

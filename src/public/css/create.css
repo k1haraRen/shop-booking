@@ -1,0 +1,38 @@
+.create-container {
+    max-width: 900px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+.form-input,
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.submit-button {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.img-preview {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 12px;
+    border-radius: 6px;
+}
+
+.meta {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+}

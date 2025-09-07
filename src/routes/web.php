@@ -20,23 +20,29 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/thanks', [AuthController::class, 'thanks'])->name('thanks');
 Route::get('/login', [AuthController::class, 'loginShow'])->name('login_show');
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/represent', [AuthController::class, 'representShow'])->name('represent_show');
+Route::post('/represent', [AuthController::class, 'represent']);
 
 Route::get('/', [ShopController::class, 'home'])->name('shop_home');
 Route::get('/shop/shop_list', [ShopController::class, 'shopList'])->name('shop_list');
 Route::post('/favorite/toggle/{shop}', [ShopController::class, 'toggle'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('favorite.toggle');
 
 Route::get('/shop/detail/{id}', [ShopController::class, 'shopDetail'])->name('shop_detail');
 Route::post('/reservation/store', [ShopController::class, 'store'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('reservation.store');
 Route::get('/reservation/done', [ShopController::class, 'done']);
 
 Route::get('/mypage', [ShopController::class, 'mypage'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('mypage');
-Route::middleware('auth')->group(function () {
-    Route::put('/reservation/{id}', [ShopController::class, 'update'])->name('reservation.update');
-    Route::delete('/reservation/{id}', [ShopController::class, 'destroy'])->name('reservation.destroy');
-});
+Route::put('/reservation/{id}', [ShopController::class, 'update'])->name('reservation.update');
+Route::delete('/reservation/{id}', [ShopController::class, 'destroy'])->name('reservation.destroy');
+
+Route::get('/shop/{id}/edit', [ShopController::class, 'edit'])->name('shop.edit');
+Route::put('/shop/{id}', [ShopController::class, 'shopUpdate'])->name('shop.update');
+
+Route::get('/shop/create', [ShopController::class, 'createView'])->name('shop.create_view');
+Route::post('/shop', [ShopController::class, 'create'])->name('shop.create');

@@ -55,5 +55,21 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
+    public function representShow()
+    {
+        return view('auth.represent');
+    }
+    public function represent(RegisterRequest $request)
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'representative' => true,
+        ]);
 
+        Auth::login($user);
+
+        return redirect()->route('login_show');
+    }
 }

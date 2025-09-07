@@ -62,8 +62,8 @@
                                 data-target="reservation-modal-{{ $reservation->id }}">キャンセル</button>
                         </div>
                     </div>
-                </div>
             @endforeach
+        </div>
     </div>
 
     <div class="right-column">

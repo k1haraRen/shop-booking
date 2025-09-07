@@ -35,7 +35,6 @@
         @endif
     </div>
 
-    {{-- モーダル --}}
     <div id="menu-modal" class="modal hidden" aria-hidden="true" role="dialog">
         <div class="modal-content">
             <button id="close-modal" class="close-btn" aria-label="閉じる">×</button>
@@ -49,6 +48,24 @@
                         </form>
                     </li>
                     <li><a class="menu-link" href="{{ route('mypage') }}">Mypage</a></li>
+                        @if (Auth::user()->representative === 1)
+                            <li>
+                                <div>
+                                    <div class="myShop">MyShop</div>
+                                    @foreach ($shops ?? [] as $shop)
+                                        <a class="myShop-link" href="{{ route('shop.edit', $shop->id) }}">
+                                            ・{{ $shop->shop_name }}
+                                        </a><br />
+                                    @endforeach
+                                </div>
+                                <a class="menu-link" href="{{ route('shop.create_view') }}">ShopCreate</a>
+                            </li>
+                        @endif
+                        @if (Auth::user()->admin === 1)
+                            <li>
+                                <a class="menu-link" href="{{ route('represent_show') }}">RepresentCreate</a>
+                            </li>
+                        @endif
                 @else
                     <li><a class="menu-link" href="{{ route('register_show') }}">Registration</a></li>
                     <li><a class="menu-link" href="{{ route('login_show') }}">Login</a></li>
