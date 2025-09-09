@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,3 +47,6 @@ Route::put('/shop/{id}', [ShopController::class, 'shopUpdate'])->name('shop.upda
 
 Route::get('/shop/create', [ShopController::class, 'createView'])->name('shop.create_view');
 Route::post('/shop', [ShopController::class, 'create'])->name('shop.create');
+
+Route::get('/admin/mail', [AdminController::class, 'create'])->name('admin.mail.form');
+Route::post('/admin/mail', [AdminController::class, 'send'])->name('admin.mail.send');

@@ -65,6 +65,9 @@
                             <li>
                                 <a class="menu-link" href="{{ route('represent_show') }}">RepresentCreate</a>
                             </li>
+                            <li>
+                                <a class="menu-link" href="">MailForm</a>
+                            </li>
                         @endif
                 @else
                     <li><a class="menu-link" href="{{ route('register_show') }}">Registration</a></li>
