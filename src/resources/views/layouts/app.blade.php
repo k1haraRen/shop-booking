@@ -66,7 +66,7 @@
                                 <a class="menu-link" href="{{ route('represent_show') }}">RepresentCreate</a>
                             </li>
                             <li>
-                                <a class="menu-link" href="">MailForm</a>
+                                <a class="menu-link" href="{{ route('admin.mail.form') }}">MailForm</a>
                             </li>
                         @endif
                 @else

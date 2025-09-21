@@ -1,0 +1,4 @@
+店舗: {{ $reservation->reservationShop->shop_name ?? '店舗情報' }}
+日付: {{ $reservation->date }}
+時間: {{ $reservation->time }}
+人数: {{ $reservation->headcount }}人

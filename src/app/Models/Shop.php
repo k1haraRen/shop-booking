@@ -42,4 +42,9 @@ class Shop extends Model
     {
         return $this->belongsTo(Genre::class, 'genre_id');
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

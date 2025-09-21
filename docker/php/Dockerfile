@@ -1,4 +1,4 @@
-FROM php:7.4.9-fpm
+FROM php:8.1-fpm
 
 COPY php.ini /usr/local/etc/php/
 
@@ -9,5 +9,12 @@ RUN apt update \
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer self-update
+
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd
 
 WORKDIR /var/www

@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        //テスト時はdailyAt('08:00')の代わりに->everyMinutes()に一時変更,.envにQUEUE_CONNECTION=syncに設定
+        $schedule->command('reminders:send')->dailyAt('06:00')->timezone(config('app.timezone'));
     }
 
     /**

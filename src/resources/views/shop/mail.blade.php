@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2>全ユーザーへメール送信</h2>
+        <h2>メール送信</h2>
 
         @if(session('success'))
             <div style="color: green;">{{ session('success') }}</div>

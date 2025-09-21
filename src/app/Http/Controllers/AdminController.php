@@ -11,7 +11,7 @@ class AdminController extends Controller
 {
     public function create()
     {
-        return view('admin.mail_form');
+        return view('shop.mail');
     }
 
     public function send(Request $request)

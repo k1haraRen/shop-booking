@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    use SimpleSoftwareIO\QrCode\Facades\QrCode;
+@endphp
+
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/mypage.css') }}" />
 @endsection
@@ -7,6 +11,22 @@
 @section('content')
     <div class="container">
         <div class="left-column">
+            @foreach ($reservations as $reservation)
+                <div class="reservation-card">
+                    <div>Shop {{ $reservation->shop->shop_name }}</div>
+                    <div>Date {{ $reservation->date }}</div>
+                    <div>Time {{ $reservation->time }}</div>
+
+                    @if (!$reservation->isQrUsed())
+                        <div class="qr-block" style="margin-top:10px;">
+                            {!! QrCode::size(200)->generate(route('reservation.verify', ['id' => $reservation->id, 'token' => $reservation->qr_token])) !!}
+                            <div class="meta">※ 受付で読み取られるとこのQRは無効になります</div>
+                        </div>
+                    @else
+                        <div class="meta">このQRは使用済み（{{ optional($reservation->qr_used_at)->format('Y-m-d H:i') }}）</div>
+                    @endif
+                </div>
+            @endforeach
             <div class="section-title">予約状況</div>
             @foreach ($reservations as $reservation)
                     <div class="reservation-card">
