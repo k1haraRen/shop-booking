@@ -53,3 +53,45 @@ composer install
 cp .env.example .env
 ```
 .env に以下の環境変数を記述
+
+```env
+DB_HOST=mysql
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+
+Mail_MATLER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=example@example.com
+MAIL_FROM_NAME="${APP_NAMW}"
+```
+6. Laravel のセットアップ
+```bash
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+```
+Fortify セットアップ手順
+```bash
+composer require laravel/fortify
+```
+config/app.php に以下を追加：
+
+```php
+App\Providers\FortifyServiceProvider::class,
+```
+以下のコマンドを実行：
+
+```bash
+php artisan vendor:publish --provider="laravel\Fortify\FortifyServiceProvider"
+php artisan migrate
+```
+
+Simple QR セットアップ手順
+```bash
+composer require simplesoftwareio/simple-qrcode
+```
