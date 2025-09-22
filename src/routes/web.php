@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RatingController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Fortify;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,4 +57,9 @@ Route::post('/admin/mail', [AdminController::class, 'send'])->name('admin.mail.s
 Route::get('/reservations/{id}/verify', [ReservationController::class, 'verify'])->name('reservation.verify');
 Route::middleware('auth')->group(function () {
     Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
+});
+
+
+Fortify::verifyEmailView(function () {
+    return view('auth.thanks');
 });
