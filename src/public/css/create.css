@@ -4,9 +4,7 @@
     padding: 0 16px;
 }
 
-.form-input,
-textarea,
-select {
+.form-input {
     width: 100%;
     padding: 10px;
     margin-bottom: 12px;
